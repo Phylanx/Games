@@ -1,5 +1,5 @@
 # Battleship
-To expand my code knowedge and abilities, I will attempt to make some a Battleship game
+To work on my C++, I will attempt to make a Battleship type game
 
 to do ...
 version 1
