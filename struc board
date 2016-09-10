@@ -1,9 +1,0 @@
-struct board{
-  char game[];
-  unsigned key[];
-  void writeDown(char game[], unsigned startIndex, char write);
-  void writeDown(unsigned key[], unsigned startIndex, unsigned write);
-  void writeRight(char game[], unsigned startIndex, char write);
-  void writeRight(unsigned key[], unsigned startIndex unsigned write);
-  
-};
