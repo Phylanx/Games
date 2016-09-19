@@ -5,8 +5,10 @@ using namespace std;
 
 int main()
 {
-    Board b(7,4);
-//    b.printRow(3);
+    Board b(8,10);
+    b.printAll();
+    b.addShip(2,6,4);
+    b.addShip(3,1,4,0);
     b.printAll();
 
     cout<<'\n';
