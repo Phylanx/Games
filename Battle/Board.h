@@ -17,15 +17,15 @@ struct Ship{
 class Board
 {
     u_int id_unique; //id = ship index
-    u_int** _board;
+    std::pair<u_int, bool>** _board;
     std::vector<Ship> _fleet;
     u_int _rows, _cols;
 
 public:
     Board(u_int row, u_int col);
     ~Board();
-    void printRow(u_int row);
-    void printAll();
+    void printRow(u_int row, bool fogOfWar);
+    void printAll(bool fogOfWar = true);
     bool addShip(u_int row, u_int col, u_int size, bool vert = true);
 
 
