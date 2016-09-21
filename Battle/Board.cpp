@@ -1,5 +1,4 @@
 #include "Board.h"
-#include <iomanip>
 
 Board::Board(u_int row, u_int col):id_unique(1), _rows(row), _cols(col)
 {
@@ -23,7 +22,7 @@ Board::~Board()
 
 void Board::printRow(u_int row, bool fogOfWar)
 {
-    const int w = 2;
+    const int w = 3;
     if(_cols < 1) return;
     if(fogOfWar && _board[row][0].second){
         std::cout << '~';
@@ -87,4 +86,43 @@ bool Board::addShip(u_int row, u_int col, u_int size, bool vert){
         }
     }
     return false;
+}
+
+//returns H(hit), M(miss), S(sunk), or I(invalid range)
+char Board::fire(u_int row, u_int col)
+{
+    if(row < _rows && col < _cols && _board[row][col].second){
+        u_int shipID = _board[row][col].first;
+        if(shipID == 0){
+            return 'M';
+        }else{
+            if(++_fleet[shipID - 1]._health == 0){
+                return 'S';
+            }else{
+                return 'H';
+            }
+        }
+
+    }
+    return 'I';
+}
+
+void Board::getFleetInfo()
+{
+    std::cout << "\n\n" <<
+                 "ID\t" <<
+                 "Health\t" <<
+                 "Size\t" <<
+                 "Row/Col\t  " <<
+                 "Vertical\n" <<
+                 std::string(40, '-') + '\n';
+    for(u_int i = 0; i < _fleet.size(); ++i){
+        Ship* ship = &_fleet[i];
+        std::cout << ship->_id << '\t' <<
+                     ship->_health << '\t' <<
+                     ship->_size << '\t' <<
+                     ship->_beginRow << ',' << ship->_beginCol << "\t  ";
+                     std::string vert = ship->_isVertical ? "Yes\n" : "No\n";
+        std::cout << vert;
+    }
 }

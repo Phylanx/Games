@@ -4,6 +4,7 @@
 #include <vector>
 #include <utility>
 #include <iostream>
+#include <iomanip>
 
 #define u_int unsigned int
 
@@ -27,7 +28,11 @@ public:
     void printRow(u_int row, bool fogOfWar);
     void printAll(bool fogOfWar = true);
     bool addShip(u_int row, u_int col, u_int size, bool vert = true);
-
+    char fire(u_int row, u_int col);
+    u_int getRows(){ return _rows; }
+    u_int getCols(){ return _cols; }
+    std::vector<Ship>& getFleet(){ return _fleet; }
+    void getFleetInfo();
 
 };
 
