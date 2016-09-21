@@ -21,16 +21,21 @@ class Board
     std::pair<u_int, bool>** _board;
     std::vector<Ship> _fleet;
     u_int _rows, _cols;
+    bool inRange(u_int row, u_int col);
+    bool shipInRange(u_int row, u_int col, u_int size, bool vertical);
+    bool noShipOverlap(u_int row, u_int col, u_int size, bool vertical);
+    void setShip(u_int row, u_int col, u_int size, bool vertical);
 
 public:
     Board(u_int row, u_int col);
     ~Board();
     void printRow(u_int row, bool fogOfWar);
     void printAll(bool fogOfWar = true);
-    bool addShip(u_int row, u_int col, u_int size, bool vert = true);
+
     char fire(u_int row, u_int col);
     u_int getRows(){ return _rows; }
     u_int getCols(){ return _cols; }
+    bool addShip(u_int row, u_int col, u_int size, bool vertical);
     std::vector<Ship>& getFleet(){ return _fleet; }
     void getFleetInfo();
 

@@ -49,45 +49,6 @@ void Board::printAll(bool fogOfWar)
     }
 }
 
-//return false if out of bounds or overlapping another ship
-bool Board::addShip(u_int row, u_int col, u_int size, bool vert){
-    if(vert){
-        if(row + size <= _rows && col < _cols){
-            //push a ship onto _fleet
-            _fleet.push_back(Ship(id_unique, size, row, col, true));
-            //check if there is a ship in the way
-            for(u_int i = 0; i < size; ++i){
-                if(_board[i + row][col].first != 0){
-                    return false;
-                }
-            }
-            for(u_int i = 0; i < size; ++i){
-                //add id values to _board
-                _board[i + row][col].first = id_unique;
-            }
-            ++id_unique;
-            return true;
-        }
-    }else{
-        if(col + size <= _cols && row < _rows){
-            _fleet.push_back(Ship(id_unique, size, row, col, false));
-            //check if there is a ship in the way
-            for(u_int i = 0; i < size; ++i){
-                if(_board[row][i + col].first != 0){
-                    return false;
-                }
-            }
-            for(u_int i = 0; i < size; ++i){
-                //add values to _board
-                _board[row][i + col].first = id_unique;
-            }
-            ++id_unique;
-            return true;
-        }
-    }
-    return false;
-}
-
 //returns H(hit), M(miss), S(sunk), or I(invalid range)
 char Board::fire(u_int row, u_int col)
 {
@@ -96,7 +57,7 @@ char Board::fire(u_int row, u_int col)
         if(shipID == 0){
             return 'M';
         }else{
-            if(++_fleet[shipID - 1]._health == 0){
+            if(--_fleet[shipID - 1]._health == 0){
                 return 'S';
             }else{
                 return 'H';
@@ -125,4 +86,55 @@ void Board::getFleetInfo()
                      std::string vert = ship->_isVertical ? "Yes\n" : "No\n";
         std::cout << vert;
     }
+}
+
+bool Board::inRange(u_int row, u_int col){ return row < _rows && col < _cols; }
+
+bool Board::shipInRange(u_int row, u_int col, u_int size, bool vertical)
+{
+    if(vertical && col < _cols && row + size - 1 < _rows){
+        return true;
+    }else if(!vertical && col + size - 1 < _cols && row < _rows){
+        return true;
+    }
+    return false;
+}
+
+void Board::setShip(u_int row, u_int col, u_int size, bool vertical)
+{
+    if(vertical){
+        for(u_int i = 0; i < size; ++i){
+            _board[row+i][col].first = id_unique;
+        }
+    }else{
+        for(u_int i = 0; i < size; ++i){
+            _board[row][col+i].first = id_unique;
+        }
+    }
+    _fleet.push_back(Ship(id_unique, size, row, col, vertical));
+    ++id_unique;
+}
+
+bool Board::noShipOverlap(u_int row, u_int col, u_int size, bool vertical)
+{
+    if( !shipInRange(row, col, size, vertical) ) return false;
+    if(vertical){
+        for(u_int i = 0; i < size; ++i){
+            if(_board[row+i][col].first > 0){ return false; }
+        }
+    }else{
+        for(u_int i = 0; i < size; ++i){
+            if(_board[row][col+i].first > 0){ return false; }
+        }
+    }
+    return true;
+}
+
+bool Board::addShip(u_int row, u_int col, u_int size, bool vertical)
+{
+    if( noShipOverlap(row, col, size, vertical) ) {
+        setShip(row, col, size, vertical);
+        return true;
+    }
+    return false;
 }
