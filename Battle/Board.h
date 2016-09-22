@@ -25,11 +25,12 @@ class Board
     bool shipInRange(u_int row, u_int col, u_int size, bool vertical);
     bool noShipOverlap(u_int row, u_int col, u_int size, bool vertical);
     void setShip(u_int row, u_int col, u_int size, bool vertical);
+    void printRow(u_int row, bool fogOfWar);
+    void printAt(u_int row, u_int col, bool fogOfWar);
 
 public:
     Board(u_int row, u_int col);
     ~Board();
-    void printRow(u_int row, bool fogOfWar);
     void printAll(bool fogOfWar = true);
 
     char fire(u_int row, u_int col);

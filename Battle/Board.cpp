@@ -20,21 +20,30 @@ Board::~Board()
     delete[] _board;
 }
 
+void Board::printAt(u_int row, u_int col, bool fogOfWar)
+{
+    if(row >= _rows || col >= _cols) { return; }
+    if(!fogOfWar){ //display all ships by id
+        std::cout << _board[row][col].first;
+    }else if(_board[row][col].second){ //if hidden
+        std::cout << '~';
+    }else if(_board[row][col].first == 0){//if not a ship
+        std::cout << 'M';
+    }else if(_fleet[_board[row][col].first - 1]._health > 0){//not sunk yet...
+        std::cout << 'H';
+    }else{//you sunk my battleship!
+        std::cout << 'S';
+    }
+}
+
 void Board::printRow(u_int row, bool fogOfWar)
 {
-    const int w = 3;
+    const int w = 2;
     if(_cols < 1) return;
-    if(fogOfWar && _board[row][0].second){
-        std::cout << '~';
-    }else{
-        std::cout << _board[row][0].first;
-    }
+    printAt(row, 0, fogOfWar);
     for(u_int i = 1; i < _cols; ++i){
-        if(fogOfWar && _board[row][i].second){
-            std::cout << std::setw(w) << '~';
-        }else{
-            std::cout << std::setw(w) << _board[row][i].first;
-        }
+        std::cout << std::setw(w) << ' ';
+        printAt(row, i, fogOfWar);
     }
 }
 
@@ -53,6 +62,7 @@ void Board::printAll(bool fogOfWar)
 char Board::fire(u_int row, u_int col)
 {
     if(row < _rows && col < _cols && _board[row][col].second){
+        _board[row][col].second = false;
         u_int shipID = _board[row][col].first;
         if(shipID == 0){
             return 'M';
